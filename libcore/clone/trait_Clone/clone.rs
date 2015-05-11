@@ -16,11 +16,12 @@ mod tests {
 
     #[test]
     fn clone_test1() {
-	let mut x: A = A { value: 68 };
+	let x: A = A { value: 68 };
 	assert_eq!(x.value, 68);
 
-	x.value = 500;
-	let y: A = x.clone();
+	let mut y: A = x.clone();
+	y.value = 500;
+	assert_eq!(x.value, 68);
 	assert_eq!(y.value, 500);
     }
 }
