@@ -1,0 +1,167 @@
+#![feature(core)]
+extern crate core;
+
+#[cfg(test)]
+mod tests {
+    use core::ops::Shl;
+
+    #[derive(Copy, Clone)]
+    struct A<T> {
+	value: T
+    }
+
+    impl Shl<A<T>> for A<T> {
+	type Output = A<T>;
+
+	fn shl(self, rhs: A<T>) -> Self::Output {
+	    A { value: self.value << rhs.value }
+	}
+    }
+
+    // pub trait Shl<RHS> {
+    //     /// The resulting type after applying the `<<` operator
+    //     #[stable(feature = "rust1", since = "1.0.0")]
+    //     type Output;
+    //
+    //     /// The method for the `<<` operator
+    //     #[stable(feature = "rust1", since = "1.0.0")]
+    //     fn shl(self, rhs: RHS) -> Self::Output;
+    // }
+
+    // macro_rules! forward_ref_binop {
+    //     (impl $imp:ident, $method:ident for $t:ty, $u:ty) => {
+    //         #[unstable(feature = "core",
+    //                    reason = "recently added, waiting for dust to settle")]
+    //         impl<'a> $imp<$u> for &'a $t {
+    //             type Output = <$t as $imp<$u>>::Output;
+    //
+    //             #[inline]
+    //             fn $method(self, other: $u) -> <$t as $imp<$u>>::Output {
+    //                 $imp::$method(*self, other)
+    //             }
+    //         }
+    //
+    //         #[unstable(feature = "core",
+    //                    reason = "recently added, waiting for dust to settle")]
+    //         impl<'a> $imp<&'a $u> for $t {
+    //             type Output = <$t as $imp<$u>>::Output;
+    //
+    //             #[inline]
+    //             fn $method(self, other: &'a $u) -> <$t as $imp<$u>>::Output {
+    //                 $imp::$method(self, *other)
+    //             }
+    //         }
+    //
+    //         #[unstable(feature = "core",
+    //                    reason = "recently added, waiting for dust to settle")]
+    //         impl<'a, 'b> $imp<&'a $u> for &'b $t {
+    //             type Output = <$t as $imp<$u>>::Output;
+    //
+    //             #[inline]
+    //             fn $method(self, other: &'a $u) -> <$t as $imp<$u>>::Output {
+    //                 $imp::$method(*self, *other)
+    //             }
+    //         }
+    //     }
+    // }
+
+    // macro_rules! shl_impl {
+    //     ($t:ty, $f:ty) => (
+    //         #[stable(feature = "rust1", since = "1.0.0")]
+    //         impl Shl<$f> for $t {
+    //             type Output = $t;
+    //
+    //             #[inline]
+    //             fn shl(self, other: $f) -> $t {
+    //                 self << other
+    //             }
+    //         }
+    //
+    //         forward_ref_binop! { impl Shl, shl for $t, $f }
+    //     )
+    // }
+
+    // macro_rules! shl_impl_all {
+    //     ($($t:ty)*) => ($(
+    //         shl_impl! { $t, u8 }
+    //         shl_impl! { $t, u16 }
+    //         shl_impl! { $t, u32 }
+    //         shl_impl! { $t, u64 }
+    //         shl_impl! { $t, usize }
+    //
+    //         shl_impl! { $t, i8 }
+    //         shl_impl! { $t, i16 }
+    //         shl_impl! { $t, i32 }
+    //         shl_impl! { $t, i64 }
+    //         shl_impl! { $t, isize }
+    //     )*)
+    // }
+
+    // shl_impl_all! { u8 u16 u32 u64 usize i8 i16 i32 i64 isize }
+
+    type T = i32;
+
+    macro_rules! shl_test {
+	($t:ty, $f:ty) => ({
+	    let a: $t = 0x1 as $t;
+	    let b: $f = 0x3 as $f;
+	    {
+		let result: $t = a.shl(b);
+		assert_eq!(result, 0x8 as $t);
+	    }
+	    {
+		let result: $t = a << b;
+		assert_eq!(result, 0x8 as $t);
+	    }
+
+	    let c: &$t = &(0x2 as $t);
+	    {
+		let result: $t = c << a;
+		assert_eq!(result, 0x4 as $t);
+	    }
+	    {
+		let result: $t = a << c;
+		assert_eq!(result, 0x4 as $t);
+	    }
+	    {
+		let result: $t = c << c;
+		assert_eq!(result, 0x8 as $t);
+	    }
+	})
+    }
+
+    macro_rules! shl_all_test {
+	($($t:ty)*) => ($(
+	    shl_test! { $t, u8 }
+	    shl_test! { $t, u16 }
+	    shl_test! { $t, u32 }
+	    shl_test! { $t, u64 }
+	    shl_test! { $t, usize }
+
+	    shl_test! { $t, i8 }
+	    shl_test! { $t, i16 }
+	    shl_test! { $t, i32 }
+	    shl_test! { $t, i64 }
+	    shl_test! { $t, isize }
+	)*)
+    }
+
+    #[test]
+    fn shl_test1() {
+	let a: A<T> = A { value: 0x1 };
+	let b: A<T> = A { value: 0x3 };
+	{
+	    let result: A<T> = a.shl(b);
+	    assert_eq!(result.value, 0x8 as T);
+	}
+	{
+	    let result: A<T> = a << b;
+	    assert_eq!(result.value, 0x8 as T);
+	}
+    }
+
+    #[test]
+    fn shl_test2() {
+	shl_all_test! { usize u8 u16 u32 u64 isize i8 i16 i32 i64 };
+    }
+}
