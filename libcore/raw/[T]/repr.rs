@@ -15,6 +15,7 @@ mod tests {
     //     fn repr(&self) -> T { unsafe { mem::transmute_copy(&self) } }
     // }
 
+    // #[repr(C)]
     // pub struct Slice<T> {
     //     pub data: *const T,
     //     pub len: usize,
