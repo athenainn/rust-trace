@@ -86,7 +86,7 @@ mod tests {
 	let value_refmut: RefMut<T> = refcell.borrow_mut();
 	let deref: &T = value_refmut.deref();
 
-	assert_eq!(*deref, 68);
+	assert_eq!(*deref, value);
     }
 
     #[test]
@@ -96,6 +96,6 @@ mod tests {
 	let value_refmut: RefMut<T> = refcell.borrow_mut();
 	let deref: T = *value_refmut;
 
-	assert_eq!(deref, 68);
+	assert_eq!(deref, value);
     }
 }

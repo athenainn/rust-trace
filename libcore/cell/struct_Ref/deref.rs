@@ -86,7 +86,7 @@ mod tests {
 	let value_ref: Ref<T> = refcell.borrow();
 	let deref: &T = value_ref.deref();
 
-	assert_eq!(*deref, 68);
+	assert_eq!(*deref, value);
     }
 
     #[test]
@@ -96,6 +96,6 @@ mod tests {
 	let value_ref: Ref<T> = refcell.borrow();
 	let deref: T = *value_ref;
 
-	assert_eq!(deref, 68);
+	assert_eq!(deref, value);
     }
 }
