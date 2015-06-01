@@ -3,6 +3,8 @@ extern crate core;
 
 #[cfg(test)]
 mod tests {
+    use core::default::Default;
+
     struct A {
 	value: u32
     }
