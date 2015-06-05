@@ -43,39 +43,26 @@ mod tests {
 
     // pub struct IntoIter<T> { inner: Option<T> }
 
-    // impl<T> Iterator for IntoIter<T> {
-    //     type Item = T;
-    //
-    //     #[inline]
-    //     fn next(&mut self) -> Option<T> { self.inner.take() }
-    //     #[inline]
-    //     fn size_hint(&self) -> (usize, Option<usize>) {
-    //         let n = if self.inner.is_some() {1} else {0};
-    //         (n, Some(n))
-    //     }
-    // }
+    // impl<T> ExactSizeIterator for IntoIter<T> {}
 
     type T = u32;
     type E = &'static str;
 
     #[test]
-    fn next_test1() {
-	let x: Result<T, E> = Ok::<T, E>(5);
-	let mut into_iter: IntoIter<T> = x.into_iter();
-	let result: Option<T> = into_iter.next();
+    fn len_test1() {
+	let x: Result<T, E> = Ok(7);
+	let into_iter: IntoIter<T> = x.into_iter();
+	let len: usize = into_iter.len();
 
-	match result {
-	    Some(v) => assert_eq!(v, 5),
-	    None => assert!(false)
-	}
+	assert_eq!(len, 1);
     }
 
     #[test]
-    fn next_test2() {
-	let x: Result<T, E> = Err::<T, E>("nothing!");
-	let mut into_iter: IntoIter<T> = x.into_iter();
-	let result: Option<T> = into_iter.next();
+    fn len_test2() {
+	let x: Result<T, E> = Err("nothing!");
+	let into_iter: IntoIter<T> = x.into_iter();
+	let len: usize = into_iter.len();
 
-	assert_eq!(result, None::<T>);
+	assert_eq!(len, 0);
     }
 }

@@ -3,7 +3,7 @@ extern crate core;
 
 #[cfg(test)]
 mod tests {
-    use core::result::Iter;
+    use core::result::IterMut;
 
     // #[derive(Clone, Copy, PartialEq, PartialOrd, Eq, Ord, Debug, Hash)]
     // #[must_use]
@@ -461,48 +461,28 @@ mod tests {
     //     }
     // }
 
-    // pub struct Iter<'a, T: 'a> { inner: Option<&'a T> }
+    // pub struct IterMut<'a, T: 'a> { inner: Option<&'a mut T> }
 
-    // impl<'a, T> Iterator for Iter<'a, T> {
-    //     type Item = &'a T;
-    //
-    //     #[inline]
-    //     fn next(&mut self) -> Option<&'a T> { self.inner.take() }
-    //     #[inline]
-    //     fn size_hint(&self) -> (usize, Option<usize>) {
-    //         let n = if self.inner.is_some() {1} else {0};
-    //         (n, Some(n))
-    //     }
-    // }
+    // impl<'a, T> ExactSizeIterator for IterMut<'a, T> {}
 
-    type T = i32;
+    type T = u32;
     type E = &'static str;
 
     #[test]
-    fn iter_test1() {
-	let x: Result<T, E> = Ok::<T, E>(7);
-	let mut iter: Iter<T> = x.iter();
-	let result: Option<&T> = iter.next();
+    fn len_test1() {
+	let mut x: Result<T, E> = Ok::<T, E>(7);
+	let iter_mut: IterMut<T> = x.iter_mut();
+	let len: usize = iter_mut.len();
 
-	match result {
-	    Some(v) => assert_eq!(*v, 7),
-	    None => assert!(false)
-	}
-
-	assert_eq!(iter.next(), None::<&T>);
+	assert_eq!(len, 1);
     }
 
     #[test]
-    fn iter_test2() {
-	let x: Result<T, E> = Err::<T, E>("nothing!");
-	let mut iter: Iter<T> = x.iter();
-	let result: Option<&T> = iter.next();
+    fn len_test2() {
+	let mut x: Result<T, E> = Err::<T, E>("nothing!");
+	let iter_mut: IterMut<T> = x.iter_mut();
+	let len: usize = iter_mut.len();
 
-	match result {
-	    Some(_) => assert!(false),
-	    None => assert!(true)
-	}
-
-	assert_eq!(iter.next(), None::<&T>);
+	assert_eq!(len, 0);
     }
 }
