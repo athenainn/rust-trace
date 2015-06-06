@@ -480,7 +480,7 @@ mod tests {
     fn unwrap_or_else_test1() {
 	let x: Result<T, E> = Ok::<T, E>(2);
 	let op: F = F;
-	let result: T = x.unwrap_or_else(op);
+	let result: T = x.unwrap_or_else::<F>(op);
 
 	assert_eq!(result, 2);
     }
@@ -489,7 +489,7 @@ mod tests {
     fn unwrap_or_else_test2() {
 	let x: Result<T, E> = Err::<T, E>("foo");
 	let op: F = F;
-	let result: T = x.unwrap_or_else(op);
+	let result: T = x.unwrap_or_else::<F>(op);
 
 	assert_eq!(result, 3);
     }

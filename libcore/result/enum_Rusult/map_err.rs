@@ -481,7 +481,7 @@ mod tests {
     fn map_err_test1() {
 	let x: Result<T, E> = Ok::<T, E>(2);
 	let op: O = O;
-	let result: Result<T, F> = x.map_err(op);
+	let result: Result<T, F> = x.map_err::<F, O>(op);
 
 	assert_eq!(result, Ok::<T, F>(2));
     }
@@ -490,7 +490,7 @@ mod tests {
     fn map_err_test2() {
 	let x: Result<T, E> = Err::<T, E>(13);
 	let op: O = O;
-	let result: Result<T, F> = x.map_err(op);
+	let result: Result<T, F> = x.map_err::<F, O>(op);
 
 	assert_eq!(result, Err::<T, F>("error code: 13".to_string()));
     }

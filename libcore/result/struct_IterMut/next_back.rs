@@ -483,6 +483,8 @@ mod tests {
 		Some(&mut ref mut x) => *x = 40,
 		None => assert!(false)
 	    }
+
+	    assert_eq!(iter_mut.next(), None::<&mut T>);
 	}
 
 	assert_eq!(x, Ok::<T, E>(40));

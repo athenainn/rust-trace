@@ -1,5 +1,4 @@
 #![feature(core, collections)]
-
 extern crate core;
 extern crate collections;
 
@@ -86,32 +85,32 @@ mod tests {
     #[test]
     fn from_iter_test1() {
 	let x: I = vec!(Ok::<A, E>(2), Ok::<A, E>(3));
-	let y: Result<V, E> = Result::<V, E>::from_iter(x); // invoke x.into_iter()
+	let result: Result<V, E> = Result::<V, E>::from_iter(x); // invoke x.into_iter()
 
-	assert_eq!(y, Ok::<V, E>(vec!(2, 3)));
+	assert_eq!(result, Ok::<V, E>(vec!(2, 3)));
     }
 
     #[test]
     fn from_iter_test2() {
 	let x: I = vec!(Err::<A, E>("error"), Ok::<A, E>(3));
-	let y: Result<V, E> = Result::<V, E>::from_iter(x); // invoke x.into_iter()
+	let result: Result<V, E> = Result::<V, E>::from_iter(x); // invoke x.into_iter()
 
-	assert_eq!(y, Err::<V, E>("error"));
+	assert_eq!(result, Err::<V, E>("error"));
     }
 
     #[test]
     fn from_iter_test3() {
 	let x: I = vec!(Ok::<A, E>(3), Err::<A, E>("error"));
-	let y: Result<V, E> = Result::<V, E>::from_iter(x); // invoke x.into_iter()
+	let result: Result<V, E> = Result::<V, E>::from_iter(x); // invoke x.into_iter()
 
-	assert_eq!(y, Err::<V, E>("error"));
+	assert_eq!(result, Err::<V, E>("error"));
     }
 
     #[test]
     fn from_iter_test4() {
 	let x: I = vec!(Err::<A, E>("error1"), Err::<A, E>("error2"));
-	let y: Result<V, E> = Result::<V, E>::from_iter(x); // invoke x.into_iter()
+	let result: Result<V, E> = Result::<V, E>::from_iter(x); // invoke x.into_iter()
 
-	assert_eq!(y, Err::<V, E>("error1"));
+	assert_eq!(result, Err::<V, E>("error1"));
     }
 }

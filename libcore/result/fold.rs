@@ -1,5 +1,4 @@
 #![feature(core, collections, unboxed_closures)]
-
 extern crate core;
 extern crate collections;
 

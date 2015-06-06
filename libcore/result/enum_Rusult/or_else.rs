@@ -469,8 +469,8 @@ mod tests {
          fn clone(&self) -> O { O }
     }
 
-    type T = u32;
-    type E = u32;
+    type T = i32;
+    type E = i32;
     type F = E;
 
     type Args = (T,);
@@ -483,17 +483,17 @@ mod tests {
 	}
     }
 
-    fn err(x: F) -> Result<T, F> { Err::<T, F>(x) }
+    fn err(x: F) -> Result<T, F> { Err::<T, F>(-x) }
 
     #[test]
     fn or_else_test1() {
 	let x: Result<T, E> = Ok::<T, E>(2);
 	let op: O = O;
 
-	let y: Result<T, F> = x.or_else(op.clone());
+	let y: Result<T, F> = x.or_else::<F, O>(op.clone());
 	assert_eq!(y, Ok::<T, E>(2));
 
-	let z: Result<T, E> = y.or_else(op);
+	let z: Result<T, E> = y.or_else::<F, O>(op);
 	assert_eq!(z, Ok::<T, E>(2));
     }
 
@@ -503,34 +503,80 @@ mod tests {
 	let x: Result<T, E> = Ok::<T, E>(2);
 	let op: O = O;
 
-	let y: Result<T, F> = x.or_else(err);
+	let y: Result<T, F> = x.or_else::<F, O>(op);
 	assert_eq!(y, Ok::<T, E>(2));
 
-	let z: Result<T, E> = y.or_else(op);
+	let z: Result<T, E> = y.or_else::<F, _>(err);
 	assert_eq!(z, Ok::<T, E>(2));
     }
 
     #[test]
     fn or_else_test3() {
-	let x: Result<T, E> = Err::<T, E>(3);
+	let x: Result<T, E> = Ok::<T, E>(2);
 	let op: O = O;
 
-	let y: Result<T, F> = x.or_else(op);
-	assert_eq!(y, Ok::<T, E>(9));
+	let y: Result<T, F> = x.or_else::<F, _>(err);
+	assert_eq!(y, Ok::<T, E>(2));
 
-	let z: Result<T, E> = y.or_else(err);
-	assert_eq!(z, Ok::<T, E>(9));
+	let z: Result<T, E> = y.or_else::<F, O>(op);
+	assert_eq!(z, Ok::<T, E>(2));
     }
 
     #[test]
     fn or_else_test4() {
+	let x: Result<T, E> = Ok::<T, E>(2);
+
+	let y: Result<T, F> = x.or_else::<F, _>(err);
+	assert_eq!(y, Ok::<T, E>(2));
+
+	let z: Result<T, E> = y.or_else::<F, _>(err);
+	assert_eq!(z, Ok::<T, E>(2));
+    }
+
+    #[test]
+    fn or_else_test5() {
 	let x: Result<T, E> = Err::<T, E>(3);
 	let op: O = O;
 
-	let y: Result<T, F> = x.or_else(err);
-	assert_eq!(y, Err::<T, E>(3));
+	let y: Result<T, F> = x.or_else::<F, O>(op.clone());
+	assert_eq!(y, Ok::<T, E>(9));
 
-	let z: Result<T, E> = y.or_else(err);
+	let z: Result<T, E> = y.or_else::<F, O>(op);
+	assert_eq!(z, Ok::<T, E>(9));
+    }
+
+    #[test]
+    fn or_else_test6() {
+	let x: Result<T, E> = Err::<T, E>(3);
+	let op: O = O;
+
+	let y: Result<T, F> = x.or_else::<F, O>(op);
+	assert_eq!(y, Ok::<T, E>(9));
+
+	let z: Result<T, E> = y.or_else::<F, _>(err);
+	assert_eq!(z, Ok::<T, E>(9));
+    }
+
+    #[test]
+    fn or_else_test7() {
+	let x: Result<T, E> = Err::<T, E>(3);
+	let op: O = O;
+
+	let y: Result<T, F> = x.or_else::<F, _>(err);
+	assert_eq!(y, Err::<T, E>(-3));
+
+	let z: Result<T, E> = y.or_else::<F, O>(op);
+	assert_eq!(z, Ok::<T, E>(9));
+    }
+
+    #[test]
+    fn or_else_test8() {
+	let x: Result<T, E> = Err::<T, E>(3);
+
+	let y: Result<T, F> = x.or_else::<F, _> (err);
+	assert_eq!(y, Err::<T, E>(-3));
+
+	let z: Result<T, E> = y.or_else::<F, _>(err);
 	assert_eq!(z, Err::<T, E>(3));
     }
 }

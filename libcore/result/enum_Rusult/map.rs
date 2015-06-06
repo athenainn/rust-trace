@@ -481,7 +481,7 @@ mod tests {
     fn map_test1() {
 	let x: Result<T, E> = Ok::<T, E>(2);
 	let op: F = F;
-	let result: Result<U, E> = x.map(op);
+	let result: Result<U, E> = x.map::<U, F>(op);
 
 	assert_eq!(result, Ok::<U, E>(-2));
     }
@@ -490,7 +490,7 @@ mod tests {
     fn map_test2() {
 	let x: Result<T, E> = Err::<T, E>("Error");
 	let op: F = F;
-	let result: Result<U, E> = x.map(op);
+	let result: Result<U, E> = x.map::<U, F>(op);
 
 	assert_eq!(result, Err::<U, E>("Error"));
     }

@@ -1,5 +1,4 @@
-#![feature(core)]
-#![feature(as_slice)]
+#![feature(core, as_slice)]
 extern crate core;
 
 #[cfg(test)]

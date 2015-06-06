@@ -490,10 +490,10 @@ mod tests {
 	let x: Result<T, E> = Ok::<T, E>(2);
 	let op: F = F;
 
-	let y: Result<U, E> = x.and_then(op.clone());
+	let y: Result<U, E> = x.and_then::<U, F>(op.clone());
 	assert_eq!(y, Ok::<T, E>(4));
 
-	let z: Result<U, E> = y.and_then(op);
+	let z: Result<U, E> = y.and_then::<U, F>(op);
 	assert_eq!(z, Ok::<T, E>(16));
     }
 
@@ -502,10 +502,10 @@ mod tests {
 	let x: Result<T, E> = Ok::<T, E>(2);
 	let op: F = F;
 
-	let y: Result<U, E> = x.and_then(op);
+	let y: Result<U, E> = x.and_then::<U, F>(op);
 	assert_eq!(y, Ok::<T, E>(4));
 
-	let z: Result<U, E> = y.and_then(err);
+	let z: Result<U, E> = y.and_then::<U, _>(err);
 	assert_eq!(z, Err::<T, E>(4));
     }
 
@@ -514,22 +514,68 @@ mod tests {
 	let x: Result<T, E> = Ok::<T, E>(2);
 	let op: F = F;
 
-	let y: Result<U, E> = x.and_then(err);
+	let y: Result<U, E> = x.and_then::<U, _>(err);
 	assert_eq!(y, Err::<T, E>(2));
 
-	let z: Result<U, E> = y.and_then(op);
+	let z: Result<U, E> = y.and_then::<U, F>(op);
 	assert_eq!(z, Err::<T, E>(2));
     }
 
     #[test]
     fn and_then_test4() {
+	let x: Result<T, E> = Ok::<T, E>(2);
+
+	let y: Result<U, E> = x.and_then::<U, _>(err);
+	assert_eq!(y, Err::<T, E>(2));
+
+	let z: Result<U, E> = y.and_then::<U, _>(err);
+	assert_eq!(z, Err::<T, E>(2));
+    }
+
+    #[test]
+    fn and_then_test5() {
 	let x: Result<T, E> = Err::<T, E>(3);
 	let op: F = F;
 
-	let y: Result<U, E> = x.and_then(op.clone());
+	let y: Result<U, E> = x.and_then::<U, F>(op.clone());
 	assert_eq!(y, Err::<T, E>(3));
 
-	let z: Result<U, E> = y.and_then(op);
+	let z: Result<U, E> = y.and_then::<U, F>(op);
+	assert_eq!(z, Err::<T, E>(3));
+    }
+
+    #[test]
+    fn and_then_test6() {
+	let x: Result<T, E> = Err::<T, E>(3);
+	let op: F = F;
+
+	let y: Result<U, E> = x.and_then::<U, F>(op);
+	assert_eq!(y, Err::<T, E>(3));
+
+	let z: Result<U, E> = y.and_then::<U, _>(err);
+	assert_eq!(z, Err::<T, E>(3));
+    }
+
+    #[test]
+    fn and_then_test7() {
+	let x: Result<T, E> = Err::<T, E>(3);
+	let op: F = F;
+
+	let y: Result<U, E> = x.and_then::<U, _>(err);
+	assert_eq!(y, Err::<T, E>(3));
+
+	let z: Result<U, E> = y.and_then::<U, F>(op);
+	assert_eq!(z, Err::<T, E>(3));
+    }
+
+    #[test]
+    fn and_then_test8() {
+	let x: Result<T, E> = Err::<T, E>(3);
+
+	let y: Result<U, E> = x.and_then::<U, _>(err);
+	assert_eq!(y, Err::<T, E>(3));
+
+	let z: Result<U, E> = y.and_then::<U, _>(err);
 	assert_eq!(z, Err::<T, E>(3));
     }
 }
