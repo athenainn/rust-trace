@@ -18,36 +18,25 @@ mod tests {
 
     // pub struct Iter<'a, A: 'a> { inner: Item<&'a A> }
 
-    // impl<'a, A> DoubleEndedIterator for Iter<'a, A> {
-    //     #[inline]
-    //     fn next_back(&mut self) -> Option<&'a A> { self.inner.next_back() }
-    // }
+    // impl<'a, A> ExactSizeIterator for Iter<'a, A> {}
 
     type T = u32;
 
     #[test]
-    fn next_back_test1() {
+    fn len_test1() {
 	let x: Option<T> = Some::<T>(7);
-	let mut iter: Iter<T> = x.iter();
-	let result: Option<&T> = iter.next_back();
+	let iter: Iter<T> = x.iter();
+	let len: usize = iter.len();
 
-	match result {
-	    Some(v) => assert_eq!(*v, 7),
-	    None => assert!(false)
-	}
-
-	assert_eq!(iter.next(), None::<&T>);
+	assert_eq!(len, 1);
     }
 
     #[test]
-    fn next_back_test2() {
+    fn len_test2() {
 	let x: Option<T> = None::<T>;
-	let mut iter: Iter<T> = x.iter();
-	let result: Option<&T> = iter.next_back();
+	let iter: Iter<T> = x.iter();
+	let len: usize = iter.len();
 
-	match result {
-	    Some(_) => assert!(false),
-	    None => assert!(true)
-	}
+	assert_eq!(len, 0);
     }
 }

@@ -3,20 +3,36 @@ extern crate core;
 
 #[cfg(test)]
 mod tests {
+    // #[derive(Clone, Copy, PartialEq, PartialOrd, Eq, Ord, Debug, Hash)]
+    // #[stable(feature = "rust1", since = "1.0.0")]
+    // pub enum Option<T> {
+    //     /// No value
+    //     #[stable(feature = "rust1", since = "1.0.0")]
+    //     None,
+    //     /// Some value `T`
+    //     #[stable(feature = "rust1", since = "1.0.0")]
+    //     Some(T)
+    // }
+
+    type T = u32;
+
     #[test]
-    fn Option_test() {
-	type T = u32;
-	let x: Option<T> = Some(2);
-	let y: Option<T> = None;
+    fn option_test1() {
+	let x: Option<T> = Some::<T>(2);
 
 	match x {
 	    Some(z) => { assert_eq!(z, 2); }
-	    _ => { assert!(false); }
+	    None => { assert!(false); }
 	}
+    }
 
-	match y {
+    #[test]
+    fn option_test2() {
+	let x: Option<T> = None::<T>;
+
+	match x {
+	    Some(_) => { assert!(false); }
 	    None => { assert!(true); }
-	    _ => { assert!(false); }
 	}
     }
 }

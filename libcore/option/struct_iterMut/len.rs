@@ -3,7 +3,7 @@ extern crate core;
 
 #[cfg(test)]
 mod tests {
-    use core::default::Default;
+    use core::option::IterMut;
 
     // #[derive(Clone, Copy, PartialEq, PartialOrd, Eq, Ord, Debug, Hash)]
     // #[stable(feature = "rust1", since = "1.0.0")]
@@ -16,25 +16,27 @@ mod tests {
     //     Some(T)
     // }
 
-    // impl<T> Default for Option<T> {
-    //     #[inline]
-    //     #[stable(feature = "rust1", since = "1.0.0")]
-    //     fn default() -> Option<T> { None }
-    // }
+    // pub struct IterMut<'a, A: 'a> { inner: Item<&'a mut A> }
+
+    // impl<'a, A> ExactSizeIterator for IterMut<'a, A> {}
 
     type T = u32;
 
     #[test]
-    fn default_test1() {
-	let x: Option<T> = Option::<T>::default();
+    fn len_test1() {
+	let mut x: Option<T> = Some::<T>(68);
+	let iter_mut: IterMut<T> = x.iter_mut();
+	let len: usize = iter_mut.len();
 
-	assert_eq!(x, None::<T>);
+	assert_eq!(len, 1);
     }
 
     #[test]
-    fn default_test2() {
-	let x: Option<T> = Default::default();
+    fn len_test2() {
+	let mut x: Option<T> = None::<T>;
+	let iter_mut: IterMut<T> = x.iter_mut();
+	let len: usize = iter_mut.len();
 
-	assert_eq!(x, None::<T>);
+	assert_eq!(len, 0);
     }
 }

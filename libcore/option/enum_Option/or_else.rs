@@ -1,4 +1,4 @@
-#![feature(core)]
+#![feature(core, unboxed_closures)]
 extern crate core;
 
 #[cfg(test)]
@@ -540,32 +540,35 @@ mod tests {
     //     }
     // }
 
-    type T = u32;
+    struct F;
 
-    #[test]
-    fn as_mut_test1() {
-	let mut x: Option<T> = Some::<T>(2);
+    type T = i32;
 
-	{
-	    let as_mut: Option<&mut T> = x.as_mut();
+    type Args = ();
 
-	    match as_mut {
-		Some(v) => *v = 42,
-		None => assert!(false)
-	    }
+    impl FnOnce<Args> for F {
+	type Output = Option<T>;
+
+	extern "rust-call" fn call_once(self, _: Args) -> Self::Output {
+	    Some::<T>(-1)
 	}
-
-	assert_eq!(x, Some::<T>(42));
     }
 
     #[test]
-    fn as_mut_test2() {
-	let mut x: Option<T> = None::<T>;
-	let as_mut: Option<&mut T> = x.as_mut();
+    fn or_else_test1() {
+	let x: Option<T> = Some::<T>(2);
+	let f: F = F;
+	let result: Option<T> = x.or_else::<F>(f);
 
-	match as_mut {
-	    Some(_) => assert!(false),
-	    None => assert!(true)
-	}
+	assert_eq!(result, Some::<T>(2));
+    }
+
+    #[test]
+    fn or_else_test2() {
+	let x: Option<T> = None::<T>;
+	let f: F = F;
+	let result: Option<T> = x.or_else::<F>(f);
+
+	assert_eq!(result, Some::<T>(-1));
     }
 }
