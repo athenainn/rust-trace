@@ -20,7 +20,8 @@ mod tests {
     type E = &'static str;
 
     #[test]
-    fn result_test1() {
+    #[allow(non_snake_case)]
+    fn Result_test1() {
 	let x: Result<T, E> = Ok::<T, E>(-3);
 	let y: Result<T, E> = Err::<T, E>("Some error message");
 

@@ -17,7 +17,8 @@ mod tests {
     type T = u32;
 
     #[test]
-    fn option_test1() {
+    #[allow(non_snake_case)]
+    fn Option_test1() {
 	let x: Option<T> = Some::<T>(2);
 
 	match x {
@@ -27,7 +28,8 @@ mod tests {
     }
 
     #[test]
-    fn option_test2() {
+    #[allow(non_snake_case)]
+    fn Option_test2() {
 	let x: Option<T> = None::<T>;
 
 	match x {
