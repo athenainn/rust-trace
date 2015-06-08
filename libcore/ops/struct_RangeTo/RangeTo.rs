@@ -62,22 +62,6 @@ mod tests {
 
     #[test]
     fn rangeto_test1() {
-	let rangeto: RangeTo<T> = RangeTo { end: 200 };
-	let message: String = format!("{:?}", rangeto);
-
-	assert_eq!(message, "..200".to_string());
-    }
-
-    #[test]
-    fn rangeto_test2() {
-	let rangeto: RangeTo<T> = ..200;
-	let message: String = format!("{:?}", rangeto);
-
-	assert_eq!(message, "..200".to_string());
-    }
-
-    #[test]
-    fn rangeto_test3() {
 	let a: A<T> = A { storage: [1, 2, 3, 4, 5, 6].repr() };
 	let range: RangeTo<usize> = ..4;
 	let slice: &[T] = &a[range];

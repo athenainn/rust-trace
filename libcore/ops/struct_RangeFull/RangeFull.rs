@@ -41,22 +41,6 @@ mod tests {
 
     #[test]
     fn rangefull_test1() {
-	let rangefull: RangeFull = RangeFull;
-	let message: String = format!("{:?}", rangefull);
-
-	assert_eq!(message, "..".to_string());
-    }
-
-    #[test]
-    fn rangefull_test2() {
-	let rangefull: RangeFull = ..;
-	let message: String = format!("{:?}", rangefull);
-
-	assert_eq!(message, "..".to_string());
-    }
-
-    #[test]
-    fn rangefull_test3() {
 	let a: A<T> = A { storage: [1, 2, 3, 4, 5, 6].repr() };
 	let rangefull: RangeFull = ..;
 	let slice: &[T] = &a[rangefull];

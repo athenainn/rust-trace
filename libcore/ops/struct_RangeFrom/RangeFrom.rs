@@ -62,22 +62,6 @@ mod tests {
 
     #[test]
     fn rangefrom_test1() {
-	let rangefrom: RangeFrom<T> = RangeFrom { start: 100 };
-	let message: String = format!("{:?}", rangefrom);
-
-	assert_eq!(message, "100..".to_string());
-    }
-
-    #[test]
-    fn rangefrom_test2() {
-	let rangefrom: RangeFrom<T> = 100..;
-	let message: String = format!("{:?}", rangefrom);
-
-	assert_eq!(message, "100..".to_string());
-    }
-
-    #[test]
-    fn rangefrom_test3() {
 	let a: A<T> = A { storage: [1, 2, 3, 4, 5, 6].repr() };
 	let range: RangeFrom<usize> = 2..;
 	let slice: &[T] = &a[range];
