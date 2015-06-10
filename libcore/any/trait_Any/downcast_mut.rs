@@ -100,5 +100,4 @@ mod tests {
 	    None => assert!(true)
 	}
     }
-
 }
