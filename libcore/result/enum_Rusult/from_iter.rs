@@ -80,7 +80,7 @@ mod tests {
     type E = &'static str;
     type R = Result<A, E>;
     type I = Vec<R>;
-    type V = Vec<A>;
+    type V = Vec<A>; // V: FromIterator<A>
 
     #[test]
     fn from_iter_test1() {

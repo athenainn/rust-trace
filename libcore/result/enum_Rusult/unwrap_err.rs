@@ -46,7 +46,7 @@ mod tests {
     //     }
     // }
 
-    type T = u32;
+    type T = u32; // T: fmt::Debug
     type E = &'static str;
 
     #[test]

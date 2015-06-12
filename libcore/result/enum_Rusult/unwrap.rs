@@ -47,7 +47,7 @@ mod tests {
     // }
 
     type T = i32;
-    type E = &'static str;
+    type E = &'static str; // E: fmt::Debug
 
     #[test]
     fn unwrap_test1() {
