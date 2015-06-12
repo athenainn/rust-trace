@@ -50,7 +50,7 @@ mod tests {
 
     #[test]
     fn len_test1() {
-	let x: Result<T, E> = Ok(7);
+	let x: Result<T, E> = Ok::<T, E>(7);
 	let into_iter: IntoIter<T> = x.into_iter();
 	let len: usize = into_iter.len();
 
@@ -59,7 +59,7 @@ mod tests {
 
     #[test]
     fn len_test2() {
-	let x: Result<T, E> = Err("nothing!");
+	let x: Result<T, E> = Err::<T, E>("nothing!");
 	let into_iter: IntoIter<T> = x.into_iter();
 	let len: usize = into_iter.len();
 

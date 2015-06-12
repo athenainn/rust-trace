@@ -60,7 +60,7 @@ mod tests {
     #[test]
     #[should_panic]
     fn unwrap_test2() {
-	let x: Result<T, E> = Err("emergency failure");
+	let x: Result<T, E> = Err::<T, E>("emergency failure");
 	let _: T = x.unwrap(); // panics with `emergency failure`
     }
 }

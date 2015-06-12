@@ -499,7 +499,7 @@ mod tests {
 
     #[test]
     fn next_test2() {
-	let mut x: Result<T, E> = Err("nothing!");
+	let mut x: Result<T, E> = Err::<T, E>("nothing!");
 
 	{
 	    let mut iter_mut: IterMut<T> = x.iter_mut();

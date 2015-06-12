@@ -483,7 +483,7 @@ mod tests {
 
     #[test]
     fn next_back_test2() {
-	let x: Result<T, E> = Err("nothing!");
+	let x: Result<T, E> = Err::<T, E>("nothing!");
 	let mut iter: Iter<T> = x.iter();
 	let result: Option<&T> = iter.next_back();
 

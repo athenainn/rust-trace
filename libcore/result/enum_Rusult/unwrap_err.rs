@@ -58,7 +58,7 @@ mod tests {
 
     #[test]
     fn unwrap_err_test2() {
-	let x: Result<T, E> = Err("emergency failure");
+	let x: Result<T, E> = Err::<T, E>("emergency failure");
 	let result: E = x.unwrap_err();
 
 	assert_eq!(result, "emergency failure");

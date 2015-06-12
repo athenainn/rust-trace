@@ -60,7 +60,7 @@ mod tests {
 
     #[test]
     fn size_hint_test1() {
-	let x: Result<T, E> = Ok(7);
+	let x: Result<T, E> = Ok::<T, E>(7);
 	let into_iter: IntoIter<T> = x.into_iter();
 	let (lower, upper): (usize, Option<usize>) = into_iter.size_hint();
 
@@ -70,7 +70,7 @@ mod tests {
 
     #[test]
     fn size_hint_test2() {
-	let x: Result<T, E> = Err("nothing!");
+	let x: Result<T, E> = Err::<T, E>("nothing!");
 	let into_iter: IntoIter<T> = x.into_iter();
 	let (lower, upper): (usize, Option<usize>) = into_iter.size_hint();
 
