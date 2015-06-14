@@ -37,8 +37,8 @@ mod tests {
     fn panic_fmt_test2() {
 	let pieces: &[&'static str]  = &["", ", ", "!"];
 
-	let x1: String = "Hello".to_string();
-	let x2: String = "World".to_string();
+	let x1: &'static str = "Hello";
+	let x2: &'static str = "World";
 	let args: &[fmt::ArgumentV1] = &[
 	    fmt::ArgumentV1::new(&x1, fmt::Display::fmt),
 	    fmt::ArgumentV1::new(&x2, fmt::Display::fmt)
