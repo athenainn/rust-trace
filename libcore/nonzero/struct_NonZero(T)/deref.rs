@@ -5,6 +5,8 @@ extern crate core;
 mod tests {
     use core::nonzero::NonZero;
 
+    use core::ops::Deref;
+
     // #[derive(Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Debug, Hash)]
     // #[unstable(feature = "core")]
     // pub struct NonZero<T: Zeroable>(T);
@@ -23,6 +25,15 @@ mod tests {
 
     #[test]
     fn deref_test1() {
+	let inner: T = 68; // non-zero
+	let nonzero: NonZero<T> = unsafe { NonZero::<T>::new(inner) };
+	let deref: &T = nonzero.deref();
+
+	assert_eq!(deref, &68);
+    }
+
+    #[test]
+    fn deref_test2() {
 	let inner: T = 68; // non-zero
 	let nonzero: NonZero<T> = unsafe { NonZero::<T>::new(inner) };
 	let deref: T = *nonzero;
