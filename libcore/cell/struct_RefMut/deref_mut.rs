@@ -6,6 +6,7 @@ mod tests {
     use core::cell::RefCell;
     use core::cell::RefMut;
 
+    use core::ops::DerefMut;
     use core::ops::Deref;
 
     // pub struct RefCell<T: ?Sized> {
@@ -70,25 +71,27 @@ mod tests {
     //     }
     // }
 
+    // impl<'b, T: ?Sized> DerefMut for RefMut<'b, T> {
+    //     #[inline]
+    //     fn deref_mut<'a>(&'a mut self) -> &'a mut T {
+    //         self._value
+    //     }
+    // }
+
     type T = i32;
 
     #[test]
     fn deref_test1() {
 	let value: T = 68;
 	let refcell: RefCell<T> = RefCell::<T>::new(value);
-	let value_refmut: RefMut<T> = refcell.borrow_mut();
-	let deref: &T = value_refmut.deref();
+	let mut value_refmut: RefMut<T> = refcell.borrow_mut();
 
-	assert_eq!(*deref, value);
-    }
+	{
+	    let deref_mut: &mut T = value_refmut.deref_mut();
+	    *deref_mut = 500;
+	}
 
-    #[test]
-    fn deref_test2() {
-	let value: T = 68;
-	let refcell: RefCell<T> = RefCell::<T>::new(value);
-	let value_refmut: RefMut<T> = refcell.borrow_mut();
-	let deref: T = *value_refmut;
-
-	assert_eq!(deref, value);
+	let value_ref: &T = value_refmut.deref();
+	assert_eq!(*value_ref, 500);
     }
 }
