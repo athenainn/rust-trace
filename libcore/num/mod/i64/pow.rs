@@ -1,0 +1,596 @@
+#![feature(core)]
+extern crate core;
+
+#[cfg(test)]
+mod tests {
+    // macro_rules! int_impl {
+    //     ($ActualT:ty, $UnsignedT:ty, $BITS:expr,
+    //      $add_with_overflow:path,
+    //      $sub_with_overflow:path,
+    //      $mul_with_overflow:path) => {
+    //         /// Returns the smallest value that can be represented by this integer type.
+    //         #[stable(feature = "rust1", since = "1.0.0")]
+    //         #[inline]
+    //         pub fn min_value() -> Self {
+    //             (-1 as Self) << ($BITS - 1)
+    //         }
+    //
+    //         /// Returns the largest value that can be represented by this integer type.
+    //         #[stable(feature = "rust1", since = "1.0.0")]
+    //         #[inline]
+    //         pub fn max_value() -> Self {
+    //             let min = Self::min_value(); !min
+    //         }
+    //
+    //         /// Converts a string slice in a given base to an integer.
+    //         ///
+    //         /// Leading and trailing whitespace represent an error.
+    //         ///
+    //         /// # Examples
+    //         ///
+    //         /// ```
+    //         /// assert_eq!(u32::from_str_radix("A", 16), Ok(10));
+    //         /// ```
+    //         #[stable(feature = "rust1", since = "1.0.0")]
+    //         #[allow(deprecated)]
+    //         pub fn from_str_radix(src: &str, radix: u32) -> Result<Self, ParseIntError> {
+    //             from_str_radix(src, radix)
+    //         }
+    //
+    //         /// Returns the number of ones in the binary representation of `self`.
+    //         ///
+    //         /// # Examples
+    //         ///
+    //         /// ```rust
+    //         /// let n = 0b01001100u8;
+    //         ///
+    //         /// assert_eq!(n.count_ones(), 3);
+    //         /// ```
+    //         #[stable(feature = "rust1", since = "1.0.0")]
+    //         #[inline]
+    //         pub fn count_ones(self) -> u32 { (self as $UnsignedT).count_ones() }
+    //
+    //         /// Returns the number of zeros in the binary representation of `self`.
+    //         ///
+    //         /// # Examples
+    //         ///
+    //         /// ```rust
+    //         /// let n = 0b01001100u8;
+    //         ///
+    //         /// assert_eq!(n.count_zeros(), 5);
+    //         /// ```
+    //         #[stable(feature = "rust1", since = "1.0.0")]
+    //         #[inline]
+    //         pub fn count_zeros(self) -> u32 {
+    //             (!self).count_ones()
+    //         }
+    //
+    //         /// Returns the number of leading zeros in the binary representation
+    //         /// of `self`.
+    //         ///
+    //         /// # Examples
+    //         ///
+    //         /// ```rust
+    //         /// let n = 0b0101000u16;
+    //         ///
+    //         /// assert_eq!(n.leading_zeros(), 10);
+    //         /// ```
+    //         #[stable(feature = "rust1", since = "1.0.0")]
+    //         #[inline]
+    //         pub fn leading_zeros(self) -> u32 {
+    //             (self as $UnsignedT).leading_zeros()
+    //         }
+    //
+    //         /// Returns the number of trailing zeros in the binary representation
+    //         /// of `self`.
+    //         ///
+    //         /// # Examples
+    //         ///
+    //         /// ```rust
+    //         /// let n = 0b0101000u16;
+    //         ///
+    //         /// assert_eq!(n.trailing_zeros(), 3);
+    //         /// ```
+    //         #[stable(feature = "rust1", since = "1.0.0")]
+    //         #[inline]
+    //         pub fn trailing_zeros(self) -> u32 {
+    //             (self as $UnsignedT).trailing_zeros()
+    //         }
+    //
+    //         /// Shifts the bits to the left by a specified amount, `n`,
+    //         /// wrapping the truncated bits to the end of the resulting integer.
+    //         ///
+    //         /// # Examples
+    //         ///
+    //         /// ```rust
+    //         /// let n = 0x0123456789ABCDEFu64;
+    //         /// let m = 0x3456789ABCDEF012u64;
+    //         ///
+    //         /// assert_eq!(n.rotate_left(12), m);
+    //         /// ```
+    //         #[stable(feature = "rust1", since = "1.0.0")]
+    //         #[inline]
+    //         pub fn rotate_left(self, n: u32) -> Self {
+    //             (self as $UnsignedT).rotate_left(n) as Self
+    //         }
+    //
+    //         /// Shifts the bits to the right by a specified amount, `n`,
+    //         /// wrapping the truncated bits to the beginning of the resulting
+    //         /// integer.
+    //         ///
+    //         /// # Examples
+    //         ///
+    //         /// ```rust
+    //         /// let n = 0x0123456789ABCDEFu64;
+    //         /// let m = 0xDEF0123456789ABCu64;
+    //         ///
+    //         /// assert_eq!(n.rotate_right(12), m);
+    //         /// ```
+    //         #[stable(feature = "rust1", since = "1.0.0")]
+    //         #[inline]
+    //         pub fn rotate_right(self, n: u32) -> Self {
+    //             (self as $UnsignedT).rotate_right(n) as Self
+    //         }
+    //
+    //         /// Reverses the byte order of the integer.
+    //         ///
+    //         /// # Examples
+    //         ///
+    //         /// ```rust
+    //         /// let n = 0x0123456789ABCDEFu64;
+    //         /// let m = 0xEFCDAB8967452301u64;
+    //         ///
+    //         /// assert_eq!(n.swap_bytes(), m);
+    //         /// ```
+    //         #[stable(feature = "rust1", since = "1.0.0")]
+    //         #[inline]
+    //         pub fn swap_bytes(self) -> Self {
+    //             (self as $UnsignedT).swap_bytes() as Self
+    //         }
+    //
+    //         /// Converts an integer from big endian to the target's endianness.
+    //         ///
+    //         /// On big endian this is a no-op. On little endian the bytes are
+    //         /// swapped.
+    //         ///
+    //         /// # Examples
+    //         ///
+    //         /// ```rust
+    //         /// let n = 0x0123456789ABCDEFu64;
+    //         ///
+    //         /// if cfg!(target_endian = "big") {
+    //         ///     assert_eq!(u64::from_be(n), n)
+    //         /// } else {
+    //         ///     assert_eq!(u64::from_be(n), n.swap_bytes())
+    //         /// }
+    //         /// ```
+    //         #[stable(feature = "rust1", since = "1.0.0")]
+    //         #[inline]
+    //         pub fn from_be(x: Self) -> Self {
+    //             if cfg!(target_endian = "big") { x } else { x.swap_bytes() }
+    //         }
+    //
+    //         /// Converts an integer from little endian to the target's endianness.
+    //         ///
+    //         /// On little endian this is a no-op. On big endian the bytes are
+    //         /// swapped.
+    //         ///
+    //         /// # Examples
+    //         ///
+    //         /// ```rust
+    //         /// let n = 0x0123456789ABCDEFu64;
+    //         ///
+    //         /// if cfg!(target_endian = "little") {
+    //         ///     assert_eq!(u64::from_le(n), n)
+    //         /// } else {
+    //         ///     assert_eq!(u64::from_le(n), n.swap_bytes())
+    //         /// }
+    //         /// ```
+    //         #[stable(feature = "rust1", since = "1.0.0")]
+    //         #[inline]
+    //         pub fn from_le(x: Self) -> Self {
+    //             if cfg!(target_endian = "little") { x } else { x.swap_bytes() }
+    //         }
+    //
+    //         /// Converts `self` to big endian from the target's endianness.
+    //         ///
+    //         /// On big endian this is a no-op. On little endian the bytes are
+    //         /// swapped.
+    //         ///
+    //         /// # Examples
+    //         ///
+    //         /// ```rust
+    //         /// let n = 0x0123456789ABCDEFu64;
+    //         ///
+    //         /// if cfg!(target_endian = "big") {
+    //         ///     assert_eq!(n.to_be(), n)
+    //         /// } else {
+    //         ///     assert_eq!(n.to_be(), n.swap_bytes())
+    //         /// }
+    //         /// ```
+    //         #[stable(feature = "rust1", since = "1.0.0")]
+    //         #[inline]
+    //         pub fn to_be(self) -> Self { // or not to be?
+    //             if cfg!(target_endian = "big") { self } else { self.swap_bytes() }
+    //         }
+    //
+    //         /// Converts `self` to little endian from the target's endianness.
+    //         ///
+    //         /// On little endian this is a no-op. On big endian the bytes are
+    //         /// swapped.
+    //         ///
+    //         /// # Examples
+    //         ///
+    //         /// ```rust
+    //         /// let n = 0x0123456789ABCDEFu64;
+    //         ///
+    //         /// if cfg!(target_endian = "little") {
+    //         ///     assert_eq!(n.to_le(), n)
+    //         /// } else {
+    //         ///     assert_eq!(n.to_le(), n.swap_bytes())
+    //         /// }
+    //         /// ```
+    //         #[stable(feature = "rust1", since = "1.0.0")]
+    //         #[inline]
+    //         pub fn to_le(self) -> Self {
+    //             if cfg!(target_endian = "little") { self } else { self.swap_bytes() }
+    //         }
+    //
+    //         /// Checked integer addition. Computes `self + other`, returning `None`
+    //         /// if overflow occurred.
+    //         ///
+    //         /// # Examples
+    //         ///
+    //         /// ```rust
+    //         /// assert_eq!(5u16.checked_add(65530), Some(65535));
+    //         /// assert_eq!(6u16.checked_add(65530), None);
+    //         /// ```
+    //         #[stable(feature = "rust1", since = "1.0.0")]
+    //         #[inline]
+    //         pub fn checked_add(self, other: Self) -> Option<Self> {
+    //             checked_op!($ActualT, $add_with_overflow, self, other)
+    //         }
+    //
+    //         /// Checked integer subtraction. Computes `self - other`, returning
+    //         /// `None` if underflow occurred.
+    //         ///
+    //         /// # Examples
+    //         ///
+    //         /// ```rust
+    //         /// assert_eq!((-127i8).checked_sub(1), Some(-128));
+    //         /// assert_eq!((-128i8).checked_sub(1), None);
+    //         /// ```
+    //         #[stable(feature = "rust1", since = "1.0.0")]
+    //         #[inline]
+    //         pub fn checked_sub(self, other: Self) -> Option<Self> {
+    //             checked_op!($ActualT, $sub_with_overflow, self, other)
+    //         }
+    //
+    //         /// Checked integer multiplication. Computes `self * other`, returning
+    //         /// `None` if underflow or overflow occurred.
+    //         ///
+    //         /// # Examples
+    //         ///
+    //         /// ```rust
+    //         /// assert_eq!(5u8.checked_mul(51), Some(255));
+    //         /// assert_eq!(5u8.checked_mul(52), None);
+    //         /// ```
+    //         #[stable(feature = "rust1", since = "1.0.0")]
+    //         #[inline]
+    //         pub fn checked_mul(self, other: Self) -> Option<Self> {
+    //             checked_op!($ActualT, $mul_with_overflow, self, other)
+    //         }
+    //
+    //         /// Checked integer division. Computes `self / other`, returning `None`
+    //         /// if `other == 0` or the operation results in underflow or overflow.
+    //         ///
+    //         /// # Examples
+    //         ///
+    //         /// ```rust
+    //         /// assert_eq!((-127i8).checked_div(-1), Some(127));
+    //         /// assert_eq!((-128i8).checked_div(-1), None);
+    //         /// assert_eq!((1i8).checked_div(0), None);
+    //         /// ```
+    //         #[stable(feature = "rust1", since = "1.0.0")]
+    //         #[inline]
+    //         pub fn checked_div(self, v: Self) -> Option<Self> {
+    //             match v {
+    //                 0   => None,
+    //                -1 if self == Self::min_value()
+    //                     => None,
+    //                 v   => Some(self / v),
+    //             }
+    //         }
+    //
+    //         /// Saturating integer addition. Computes `self + other`, saturating at
+    //         /// the numeric bounds instead of overflowing.
+    //         #[stable(feature = "rust1", since = "1.0.0")]
+    //         #[inline]
+    //         pub fn saturating_add(self, other: Self) -> Self {
+    //             match self.checked_add(other) {
+    //                 Some(x)                       => x,
+    //                 None if other >= Self::zero() => Self::max_value(),
+    //                 None => Self::min_value(),
+    //             }
+    //         }
+    //
+    //         /// Saturating integer subtraction. Computes `self - other`, saturating
+    //         /// at the numeric bounds instead of overflowing.
+    //         #[stable(feature = "rust1", since = "1.0.0")]
+    //         #[inline]
+    //         pub fn saturating_sub(self, other: Self) -> Self {
+    //             match self.checked_sub(other) {
+    //                 Some(x)                      => x,
+    //                 None if other >= Self::zero() => Self::min_value(),
+    //                 None => Self::max_value(),
+    //             }
+    //         }
+    //
+    //         /// Wrapping (modular) addition. Computes `self + other`,
+    //         /// wrapping around at the boundary of the type.
+    //         #[stable(feature = "rust1", since = "1.0.0")]
+    //         #[inline]
+    //         pub fn wrapping_add(self, rhs: Self) -> Self {
+    //             unsafe {
+    //                 intrinsics::overflowing_add(self, rhs)
+    //             }
+    //         }
+    //
+    //         /// Wrapping (modular) subtraction. Computes `self - other`,
+    //         /// wrapping around at the boundary of the type.
+    //         #[stable(feature = "rust1", since = "1.0.0")]
+    //         #[inline]
+    //         pub fn wrapping_sub(self, rhs: Self) -> Self {
+    //             unsafe {
+    //                 intrinsics::overflowing_sub(self, rhs)
+    //             }
+    //         }
+    //
+    //         /// Wrapping (modular) multiplication. Computes `self *
+    //         /// other`, wrapping around at the boundary of the type.
+    //         #[stable(feature = "rust1", since = "1.0.0")]
+    //         #[inline]
+    //         pub fn wrapping_mul(self, rhs: Self) -> Self {
+    //             unsafe {
+    //                 intrinsics::overflowing_mul(self, rhs)
+    //             }
+    //         }
+    //
+    //         /// Wrapping (modular) division. Computes `floor(self / other)`,
+    //         /// wrapping around at the boundary of the type.
+    //         ///
+    //         /// The only case where such wrapping can occur is when one
+    //         /// divides `MIN / -1` on a signed type (where `MIN` is the
+    //         /// negative minimal value for the type); this is equivalent
+    //         /// to `-MIN`, a positive value that is too large to represent
+    //         /// in the type. In such a case, this function returns `MIN`
+    //         /// itself..
+    //         #[unstable(feature = "core", since = "1.0.0")]
+    //         #[inline(always)]
+    //         pub fn wrapping_div(self, rhs: Self) -> Self {
+    //             self.overflowing_div(rhs).0
+    //         }
+    //
+    //         /// Wrapping (modular) remainder. Computes `self % other`,
+    //         /// wrapping around at the boundary of the type.
+    //         ///
+    //         /// Such wrap-around never actually occurs mathematically;
+    //         /// implementation artifacts make `x % y` illegal for `MIN /
+    //         /// -1` on a signed type illegal (where `MIN` is the negative
+    //         /// minimal value). In such a case, this function returns `0`.
+    //         #[unstable(feature = "core", since = "1.0.0")]
+    //         #[inline(always)]
+    //         pub fn wrapping_rem(self, rhs: Self) -> Self {
+    //             self.overflowing_rem(rhs).0
+    //         }
+    //
+    //         /// Wrapping (modular) negation. Computes `-self`,
+    //         /// wrapping around at the boundary of the type.
+    //         ///
+    //         /// The only case where such wrapping can occur is when one
+    //         /// negates `MIN` on a signed type (where `MIN` is the
+    //         /// negative minimal value for the type); this is a positive
+    //         /// value that is too large to represent in the type. In such
+    //         /// a case, this function returns `MIN` itself.
+    //         #[unstable(feature = "core", since = "1.0.0")]
+    //         #[inline(always)]
+    //         pub fn wrapping_neg(self) -> Self {
+    //             self.overflowing_neg().0
+    //         }
+    //
+    //         /// Panic-free bitwise shift-left; yields `self << mask(rhs)`,
+    //         /// where `mask` removes any high-order bits of `rhs` that
+    //         /// would cause the shift to exceed the bitwidth of the type.
+    //         #[unstable(feature = "core", since = "1.0.0")]
+    //         #[inline(always)]
+    //         pub fn wrapping_shl(self, rhs: u32) -> Self {
+    //             self.overflowing_shl(rhs).0
+    //         }
+    //
+    //         /// Panic-free bitwise shift-left; yields `self >> mask(rhs)`,
+    //         /// where `mask` removes any high-order bits of `rhs` that
+    //         /// would cause the shift to exceed the bitwidth of the type.
+    //         #[unstable(feature = "core", since = "1.0.0")]
+    //         #[inline(always)]
+    //         pub fn wrapping_shr(self, rhs: u32) -> Self {
+    //             self.overflowing_shr(rhs).0
+    //         }
+    //
+    //         /// Raises self to the power of `exp`, using exponentiation by squaring.
+    //         ///
+    //         /// # Examples
+    //         ///
+    //         /// ```
+    //         /// let x: i32 = 2; // or any other integer type
+    //         ///
+    //         /// assert_eq!(x.pow(4), 16);
+    //         /// ```
+    //         #[stable(feature = "rust1", since = "1.0.0")]
+    //         #[inline]
+    //         pub fn pow(self, mut exp: u32) -> Self {
+    //             let mut base = self;
+    //             let mut acc = Self::one();
+    //
+    //             let mut prev_base = self;
+    //             let mut base_oflo = false;
+    //             while exp > 0 {
+    //                 if (exp & 1) == 1 {
+    //                     if base_oflo {
+    //                         // ensure overflow occurs in the same manner it
+    //                         // would have otherwise (i.e. signal any exception
+    //                         // it would have otherwise).
+    //                         acc = acc * (prev_base * prev_base);
+    //                     } else {
+    //                         acc = acc * base;
+    //                     }
+    //                 }
+    //                 prev_base = base;
+    //                 let (new_base, new_base_oflo) = base.overflowing_mul(base);
+    //                 base = new_base;
+    //                 base_oflo = new_base_oflo;
+    //                 exp /= 2;
+    //             }
+    //             acc
+    //         }
+    //
+    //         /// Computes the absolute value of `self`.
+    //         ///
+    //         /// # Overflow behavior
+    //         ///
+    //         /// The absolute value of `i32::min_value()` cannot be represented as an
+    //         /// `i32`, and attempting to calculate it will cause an overflow. This
+    //         /// means that code in debug mode will trigger a panic on this case and
+    //         /// optimized code will return `i32::min_value()` without a panic.
+    //         #[stable(feature = "rust1", since = "1.0.0")]
+    //         #[inline]
+    //         pub fn abs(self) -> Self {
+    //             if self.is_negative() {
+    //                 // Note that the #[inline] above means that the overflow
+    //                 // semantics of this negation depend on the crate we're being
+    //                 // inlined into.
+    //                 -self
+    //             } else {
+    //                 self
+    //             }
+    //         }
+    //
+    //         /// Returns a number representing sign of `self`.
+    //         ///
+    //         /// - `0` if the number is zero
+    //         /// - `1` if the number is positive
+    //         /// - `-1` if the number is negative
+    //         #[stable(feature = "rust1", since = "1.0.0")]
+    //         #[inline]
+    //         pub fn signum(self) -> Self {
+    //             match self {
+    //                 n if n > 0 =>  1,
+    //                 0          =>  0,
+    //                 _          => -1,
+    //             }
+    //         }
+    //
+    //         /// Returns `true` if `self` is positive and `false` if the number
+    //         /// is zero or negative.
+    //         #[stable(feature = "rust1", since = "1.0.0")]
+    //         #[inline]
+    //         pub fn is_positive(self) -> bool { self > 0 }
+    //
+    //         /// Returns `true` if `self` is negative and `false` if the number
+    //         /// is zero or positive.
+    //         #[stable(feature = "rust1", since = "1.0.0")]
+    //         #[inline]
+    //         pub fn is_negative(self) -> bool { self < 0 }
+    //     }
+    // }
+
+    // impl i64 {
+    //     int_impl! { i64, u64, 64,
+    //         intrinsics::i64_add_with_overflow,
+    //         intrinsics::i64_sub_with_overflow,
+    //         intrinsics::i64_mul_with_overflow }
+    // }
+
+    macro_rules! pow_test {
+	($value:expr, $exp:expr, $result:expr) => ({
+	    let x: i64 = $value;
+	    let exp: u32  = $exp;
+	    let result: i64 = x.pow(exp);
+
+	    assert_eq!(result, $result);
+	})
+    }
+
+    #[test]
+    fn pow_test1() {
+	pow_test!( 0x0000000000000002, 0, 0x0000000000000001 );
+	pow_test!( 0x0000000000000002, 1, 0x0000000000000002 );
+	pow_test!( 0x0000000000000002, 2, 0x0000000000000004 );
+	pow_test!( 0x0000000000000002, 3, 0x0000000000000008 );
+	pow_test!( 0x0000000000000002, 4, 0x0000000000000010 );
+	pow_test!( 0x0000000000000002, 5, 0x0000000000000020 );
+	pow_test!( 0x0000000000000002, 6, 0x0000000000000040 );
+	pow_test!( 0x0000000000000002, 7, 0x0000000000000080 );
+	pow_test!( 0x0000000000000002, 8, 0x0000000000000100 );
+	pow_test!( 0x0000000000000002, 9, 0x0000000000000200 );
+	pow_test!( 0x0000000000000002, 10, 0x0000000000000400 );
+	pow_test!( 0x0000000000000002, 11, 0x0000000000000800 );
+	pow_test!( 0x0000000000000002, 12, 0x0000000000001000 );
+	pow_test!( 0x0000000000000002, 13, 0x0000000000002000 );
+	pow_test!( 0x0000000000000002, 14, 0x0000000000004000 );
+	pow_test!( 0x0000000000000002, 15, 0x0000000000008000 );
+	pow_test!( 0x0000000000000002, 16, 0x0000000000010000 );
+	pow_test!( 0x0000000000000002, 17, 0x0000000000020000 );
+	pow_test!( 0x0000000000000002, 18, 0x0000000000040000 );
+	pow_test!( 0x0000000000000002, 19, 0x0000000000080000 );
+	pow_test!( 0x0000000000000002, 20, 0x0000000000100000 );
+	pow_test!( 0x0000000000000002, 21, 0x0000000000200000 );
+	pow_test!( 0x0000000000000002, 22, 0x0000000000400000 );
+	pow_test!( 0x0000000000000002, 23, 0x0000000000800000 );
+	pow_test!( 0x0000000000000002, 24, 0x0000000001000000 );
+	pow_test!( 0x0000000000000002, 25, 0x0000000002000000 );
+	pow_test!( 0x0000000000000002, 26, 0x0000000004000000 );
+	pow_test!( 0x0000000000000002, 27, 0x0000000008000000 );
+	pow_test!( 0x0000000000000002, 28, 0x0000000010000000 );
+	pow_test!( 0x0000000000000002, 29, 0x0000000020000000 );
+	pow_test!( 0x0000000000000002, 30, 0x0000000040000000 );
+	pow_test!( 0x0000000000000002, 31, 0x0000000080000000 );
+	pow_test!( 0x0000000000000002, 32, 0x0000000100000000 );
+	pow_test!( 0x0000000000000002, 33, 0x0000000200000000 );
+	pow_test!( 0x0000000000000002, 34, 0x0000000400000000 );
+	pow_test!( 0x0000000000000002, 35, 0x0000000800000000 );
+	pow_test!( 0x0000000000000002, 36, 0x0000001000000000 );
+	pow_test!( 0x0000000000000002, 37, 0x0000002000000000 );
+	pow_test!( 0x0000000000000002, 38, 0x0000004000000000 );
+	pow_test!( 0x0000000000000002, 39, 0x0000008000000000 );
+	pow_test!( 0x0000000000000002, 40, 0x0000010000000000 );
+	pow_test!( 0x0000000000000002, 41, 0x0000020000000000 );
+	pow_test!( 0x0000000000000002, 42, 0x0000040000000000 );
+	pow_test!( 0x0000000000000002, 43, 0x0000080000000000 );
+	pow_test!( 0x0000000000000002, 44, 0x0000100000000000 );
+	pow_test!( 0x0000000000000002, 45, 0x0000200000000000 );
+	pow_test!( 0x0000000000000002, 46, 0x0000400000000000 );
+	pow_test!( 0x0000000000000002, 47, 0x0000800000000000 );
+	pow_test!( 0x0000000000000002, 48, 0x0001000000000000 );
+	pow_test!( 0x0000000000000002, 49, 0x0002000000000000 );
+	pow_test!( 0x0000000000000002, 50, 0x0004000000000000 );
+	pow_test!( 0x0000000000000002, 51, 0x0008000000000000 );
+	pow_test!( 0x0000000000000002, 52, 0x0010000000000000 );
+	pow_test!( 0x0000000000000002, 53, 0x0020000000000000 );
+	pow_test!( 0x0000000000000002, 54, 0x0040000000000000 );
+	pow_test!( 0x0000000000000002, 55, 0x0080000000000000 );
+	pow_test!( 0x0000000000000002, 56, 0x0100000000000000 );
+	pow_test!( 0x0000000000000002, 57, 0x0200000000000000 );
+	pow_test!( 0x0000000000000002, 58, 0x0400000000000000 );
+	pow_test!( 0x0000000000000002, 59, 0x0800000000000000 );
+	pow_test!( 0x0000000000000002, 60, 0x1000000000000000 );
+	pow_test!( 0x0000000000000002, 61, 0x2000000000000000 );
+	pow_test!( 0x0000000000000002, 62, 0x4000000000000000 );
+    }
+
+    #[test]
+    #[allow(overflowing_literals)]
+    #[should_panic]
+    fn pow_test2() {
+	pow_test!( 0x0000000000000002, 63, 0x8000000000000000 ); // panicked at 'arithmetic operation overflowed'
+    }
+}
