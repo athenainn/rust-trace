@@ -10,6 +10,10 @@ mod tests {
     //     _marker: PhantomData<T>,
     // }
 
+    // unsafe impl<T: Send + ?Sized> Send for Unique<T> { }
+
+    // unsafe impl<T: Sync + ?Sized> Sync for Unique<T> { }
+
     // impl<T: ?Sized> Unique<T> {
     //     /// Creates a new `Unique`.
     //     #[unstable(feature = "unique")]
