@@ -21,5 +21,6 @@ mod tests {
 	};
 
 	assert_eq!(result, 68);
+	assert_eq!(src, 68);
     }
 }
