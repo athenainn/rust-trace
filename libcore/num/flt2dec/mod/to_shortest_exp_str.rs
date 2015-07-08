@@ -348,7 +348,7 @@ mod tests {
 	let sign: Sign = Minus;
 	let lo: i16 = 0;
 	let hi: i16 = 1;
-	let dec_bounds: (i16, i16) = (lo, hi); // dummy
+	let dec_bounds: (i16, i16) = (lo, hi);
 	let upper: bool = true;
 	let mut buf: [u8; MAX_SIG_DIGITS] = [
 	    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -381,7 +381,7 @@ mod tests {
 	let sign: Sign = Minus;
 	let lo: i16 = 0;
 	let hi: i16 = 1;
-	let dec_bounds: (i16, i16) = (lo, hi); // dummy
+	let dec_bounds: (i16, i16) = (lo, hi);
 	let upper: bool = false;
 	let mut buf: [u8; MAX_SIG_DIGITS] = [
 	    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -416,7 +416,7 @@ mod tests {
 	let sign: Sign = Minus;
 	let lo: i16 = 23;
 	let hi: i16 = 24;
-	let dec_bounds: (i16, i16) = (lo, hi); // dummy
+	let dec_bounds: (i16, i16) = (lo, hi);
 	let upper: bool = true;
 	let mut buf: [u8; MAX_SIG_DIGITS] = [
 	    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -448,7 +448,7 @@ mod tests {
 	let sign: Sign = Minus;
 	let lo: i16 = 68;
 	let hi: i16 = 99;
-	let dec_bounds: (i16, i16) = (lo, hi); // dummy
+	let dec_bounds: (i16, i16) = (lo, hi);
 	let upper: bool = true;
 	let mut buf: [u8; MAX_SIG_DIGITS] = [
 	    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,

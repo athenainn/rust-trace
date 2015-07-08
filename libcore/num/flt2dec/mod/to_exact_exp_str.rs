@@ -221,7 +221,7 @@ mod tests {
     fn to_exact_exp_str_test4() {
 	let v: T = T::zero();
 	let sign: Sign = Minus;
-	let ndigits: usize = 1; // dummy
+	let ndigits: usize = 1; // <= 1
 	let upper: bool = false;
 	let mut buf: [u8; MAX_SIG_DIGITS] = [
 	    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -250,7 +250,7 @@ mod tests {
     fn to_exact_exp_str_test5() {
 	let v: T = T::zero();
 	let sign: Sign = Minus;
-	let ndigits: usize = 1; // dummy
+	let ndigits: usize = 1; // <= 1
 	let upper: bool = true;
 	let mut buf: [u8; MAX_SIG_DIGITS] = [
 	    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -279,7 +279,7 @@ mod tests {
     fn to_exact_exp_str_test6() {
 	let v: T = T::zero();
 	let sign: Sign = Minus;
-	let ndigits: usize = 10;
+	let ndigits: usize = 10; // > 1
 	let upper: bool = false;
 	let mut buf: [u8; MAX_SIG_DIGITS] = [
 	    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
