@@ -4,7 +4,6 @@ extern crate core;
 #[cfg(test)]
 mod tests {
     use core::intrinsics::init;
-    use core::intrinsics::forget;
 
     // pub fn init<T>() -> T;
 
@@ -13,8 +12,6 @@ mod tests {
 	    let value: $T = unsafe { init::<$T>() };
 
 	    assert_eq!(value, $value);
-
-	    unsafe { forget::<$T>(value); }
 	})
     }
 

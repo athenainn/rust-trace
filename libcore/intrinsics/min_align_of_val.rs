@@ -20,6 +20,16 @@ mod tests {
 
     #[test]
     fn min_align_of_val_test1() {
+	struct A;
+
+	let a: A = A;
+	let size: usize = unsafe { min_align_of_val::<A>(&a) };
+
+	assert_eq!(size, 1);
+    }
+
+    #[test]
+    fn min_align_of_val_test2() {
 	min_align_of_val_test!( (u8), 1 );
 	min_align_of_val_test!( (u8, u16), 2 );
 	min_align_of_val_test!( (u8, u16, u32), 4 );

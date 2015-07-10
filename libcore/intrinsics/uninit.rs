@@ -4,15 +4,12 @@ extern crate core;
 #[cfg(test)]
 mod tests {
     use core::intrinsics::uninit;
-    use core::intrinsics::forget;
 
     // pub fn uninit<T>() -> T;
 
     macro_rules! uninit_test {
 	($T:ty) => ({
-	    let value: $T = unsafe { uninit::<$T>() };
-
-	    unsafe { forget::<$T>(value); }
+	    let _: $T = unsafe { uninit::<$T>() };
 	})
     }
 

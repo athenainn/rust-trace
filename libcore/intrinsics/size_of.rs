@@ -17,6 +17,13 @@ mod tests {
 
     #[test]
     fn size_of_test1() {
+	struct A;
+
+	size_of_test!( A, 0 );
+    }
+
+    #[test]
+    fn size_of_test2() {
 	size_of_test!( u8, 1 );
 	size_of_test!( u16, 2 );
 	size_of_test!( u32, 4 );

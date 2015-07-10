@@ -4,7 +4,6 @@ extern crate core;
 #[cfg(test)]
 mod tests {
     use core::intrinsics::init_dropped;
-    use core::intrinsics::forget;
 
     use core::mem::POST_DROP_U8;
     use core::mem::POST_DROP_U32;
@@ -18,8 +17,6 @@ mod tests {
 	    let value: $T = unsafe { init_dropped::<$T>() };
 
 	    assert_eq!(value, $value);
-
-	    unsafe { forget::<$T>(value); }
 	})
     }
 

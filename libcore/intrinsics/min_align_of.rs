@@ -17,6 +17,13 @@ mod tests {
 
     #[test]
     fn min_align_of_test1() {
+	struct A;
+
+	min_align_of_test!( A, 1 );
+    }
+
+    #[test]
+    fn min_align_of_test2() {
 	min_align_of_test!( u8, 1 );
 	min_align_of_test!( u16, 2 );
 	min_align_of_test!( u32, 4 );

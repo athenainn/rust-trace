@@ -18,6 +18,15 @@ mod tests {
 
     #[test]
     fn size_of_val_test1() {
+	struct A;
+
+	let a: A = A;
+
+	size_of_val_test!( A, a, 0 );
+    }
+
+    #[test]
+    fn size_of_val_test2() {
 	size_of_val_test!( u8, 0, 1 );
 	size_of_val_test!( u16, 0, 2 );
 	size_of_val_test!( u32, 0, 4 );
