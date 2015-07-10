@@ -1,0 +1,101 @@
+#![feature(core, wrapping)]
+extern crate core;
+
+#[cfg(test)]
+mod tests {
+    use core::num::wrapping::OverflowingOps;
+
+    // mod shift_max {
+    //     #![allow(non_upper_case_globals)]
+    //
+    //     pub const  i8: u32 = (1 << 3) - 1;
+    //     pub const i16: u32 = (1 << 4) - 1;
+    //     pub const i32: u32 = (1 << 5) - 1;
+    //     pub const i64: u32 = (1 << 6) - 1;
+    //
+    //     pub const  u8: u32 = i8;
+    //     pub const u16: u32 = i16;
+    //     pub const u32: u32 = i32;
+    //     pub const u64: u32 = i64;
+    // }
+
+    // macro_rules! unsigned_overflowing_impl {
+    //     ($($t:ident)*) => ($(
+    //         impl OverflowingOps for $t {
+    //             #[inline(always)]
+    //             fn overflowing_add(self, rhs: $t) -> ($t, bool) {
+    //                 unsafe {
+    //                     concat_idents!($t, _add_with_overflow)(self, rhs)
+    //                 }
+    //             }
+    //             #[inline(always)]
+    //             fn overflowing_sub(self, rhs: $t) -> ($t, bool) {
+    //                 unsafe {
+    //                     concat_idents!($t, _sub_with_overflow)(self, rhs)
+    //                 }
+    //             }
+    //             #[inline(always)]
+    //             fn overflowing_mul(self, rhs: $t) -> ($t, bool) {
+    //                 unsafe {
+    //                     concat_idents!($t, _mul_with_overflow)(self, rhs)
+    //                 }
+    //             }
+    //
+    //             #[inline(always)]
+    //             fn overflowing_div(self, rhs: $t) -> ($t, bool) {
+    //                 (self/rhs, false)
+    //             }
+    //             #[inline(always)]
+    //             fn overflowing_rem(self, rhs: $t) -> ($t, bool) {
+    //                 (self % rhs, false)
+    //             }
+    //
+    //             #[inline(always)]
+    //             fn overflowing_shl(self, rhs: u32) -> ($t, bool) {
+    //                 (self << (rhs & self::shift_max::$t),
+    //                  (rhs > self::shift_max::$t))
+    //             }
+    //             #[inline(always)]
+    //             fn overflowing_shr(self, rhs: u32) -> ($t, bool) {
+    //                 (self >> (rhs & self::shift_max::$t),
+    //                  (rhs > self::shift_max::$t))
+    //             }
+    //
+    //             #[inline(always)]
+    //             fn overflowing_neg(self) -> ($t, bool) {
+    //                 ((!self).wrapping_add(1), true)
+    //             }
+    //         }
+    //     )*)
+    // }
+
+    // unsigned_overflowing_impl! { u8 u16 u32 u64 }
+
+    macro_rules! overflowing_rem_test {
+	($T:ty, $value:expr, $rhs:expr, $result:expr) => ({
+	    let value: $T = $value;
+	    let rhs: $T = $rhs;
+	    let result: ($T, bool) = value.overflowing_rem(rhs);
+
+	    assert_eq!(result, $result);
+	})
+    }
+
+    #[test]
+    #[should_panic]
+    fn overflowing_rem_test1() {
+	let always_false: bool = false;
+
+	overflowing_rem_test!( u16, 0xffff, 0x0000, (0xffff, always_false) ); // panicked at 'attempted to remide by zero'
+    }
+
+    #[test]
+    fn overflowing_rem_test2() {
+	let always_false: bool = false;
+
+	overflowing_rem_test!( u16, 0xffff, 0x0001, (0x0000, always_false) );
+	overflowing_rem_test!( u16, 0xffff, 0x0002, (0x0001, always_false) );
+	overflowing_rem_test!( u16, 0xffff, 0x0003, (0x0000, always_false) );
+	overflowing_rem_test!( u16, 0xffff, 0x0004, (0x0003, always_false) );
+    }
+}

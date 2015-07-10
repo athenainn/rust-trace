@@ -1,0 +1,57 @@
+#![feature(core)]
+extern crate core;
+
+#[cfg(test)]
+mod tests {
+    use core::slice::IntSliceExt;
+
+    // pub trait IntSliceExt<U, S> {
+    //     /// Converts the slice to an immutable slice of unsigned integers with the same width.
+    //     fn as_unsigned<'a>(&'a self) -> &'a [U];
+    //     /// Converts the slice to an immutable slice of signed integers with the same width.
+    //     fn as_signed<'a>(&'a self) -> &'a [S];
+    //
+    //     /// Converts the slice to a mutable slice of unsigned integers with the same width.
+    //     fn as_unsigned_mut<'a>(&'a mut self) -> &'a mut [U];
+    //     /// Converts the slice to a mutable slice of signed integers with the same width.
+    //     fn as_signed_mut<'a>(&'a mut self) -> &'a mut [S];
+    // }
+
+    // macro_rules! impl_int_slice {
+    //     ($u:ty, $s:ty, $t:ty) => {
+    //         #[unstable(feature = "core")]
+    //         impl IntSliceExt<$u, $s> for [$t] {
+    //             #[inline]
+    //             fn as_unsigned(&self) -> &[$u] { unsafe { transmute(self) } }
+    //             #[inline]
+    //             fn as_signed(&self) -> &[$s] { unsafe { transmute(self) } }
+    //             #[inline]
+    //             fn as_unsigned_mut(&mut self) -> &mut [$u] { unsafe { transmute(self) } }
+    //             #[inline]
+    //             fn as_signed_mut(&mut self) -> &mut [$s] { unsafe { transmute(self) } }
+    //         }
+    //     }
+    // }
+
+    // macro_rules! impl_int_slices {
+    //     ($u:ty, $s:ty) => {
+    //         impl_int_slice! { $u, $s, $u }
+    //         impl_int_slice! { $u, $s, $s }
+    //     }
+    // }
+
+    // impl_int_slices! { u16,  i16 }
+
+    type U = u16;
+    type S = i16;
+    type T = S;
+
+    #[test]
+    #[allow(overflowing_literals)]
+    fn as_signed_test1() {
+	let slice: &[T] = &[0xffff];
+	let as_signed: &[S] = slice.as_signed();
+
+	assert_eq!(as_signed[0], -1);
+    }
+}
