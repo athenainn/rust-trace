@@ -20,7 +20,7 @@ mod tests {
 
     struct Foo<'a, T: 'a> {
 	ptr: *mut Bar<T>,
-	marker: PhantomData<&'a T>
+	_marker: PhantomData<&'a T>
     }
 
     impl<'a, T> Foo<'a, T> {
@@ -35,7 +35,7 @@ mod tests {
     #[test]
     fn copy_lifetime_test1() {
 	let mut bar: Bar<T> = Bar { bar: 68 };
-	let foo: Foo<T> = Foo { ptr: &mut bar, marker: PhantomData::<&T> };
+	let foo: Foo<T> = Foo { ptr: &mut bar, _marker: PhantomData::<&T> };
 	let ptr: &mut T = foo.bar();
 
 	assert_eq!(*ptr, 68);

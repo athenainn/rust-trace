@@ -5,7 +5,7 @@ extern crate core;
 mod tests {
     use core::mem::copy_lifetime;
 
-    use core::marker::PhantomData;
+    use core::_marker::PhantomData;
 
     // pub unsafe fn copy_lifetime<'a, S: ?Sized, T: ?Sized + 'a>(_ptr: &'a S,
     //                                                         ptr: &T) -> &'a T {
@@ -18,7 +18,7 @@ mod tests {
 
     struct Foo<'a, T: 'a> {
 	ptr: *const Bar<T>,
-	marker: PhantomData<&'a T>
+	_marker: PhantomData<&'a T>
     }
 
     impl<'a, T> Foo<'a, T> {
@@ -33,7 +33,7 @@ mod tests {
     #[test]
     fn copy_lifetime_test1() {
 	let bar: Bar<T> = Bar { bar: 68 };
-	let foo: Foo<T> = Foo { ptr: &bar, marker: PhantomData::<&T> };
+	let foo: Foo<T> = Foo { ptr: &bar, _marker: PhantomData::<&T> };
 	let ptr: &T = foo.bar();
 
 	assert_eq!(*ptr, 68);
