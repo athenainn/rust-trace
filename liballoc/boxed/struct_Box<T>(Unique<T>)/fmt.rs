@@ -43,7 +43,7 @@ mod tests {
     //     }
     // }
 
-    type T = i32; // T: fmt::Display + ? Sized
+    type T = i32; // T: fmt::Display + ?Sized
 		  // T: fmt::Debug + ?Sized
 
     #[test]
